@@ -1,8 +1,8 @@
 
-export const TrackPage = () => {
+export const AdminTypesPage = () => {
   return (
     <>
-      <h1>Track</h1>
+      <h1>Types</h1>
 
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam justo enim, maximus vitae scelerisque vitae, condimentum eu mi. Phasellus neque orci, semper et blandit nec, vulputate vitae leo. Nullam elementum metus lacus, vitae pretium massa tempus nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris in blandit enim. Cras odio est, rhoncus elementum posuere eget, venenatis vitae nibh. Ut accumsan risus non purus fermentum, id suscipit urna dignissim. Donec sollicitudin pellentesque quam a suscipit. Integer vel elit libero. Suspendisse iaculis felis nec vulputate sollicitudin. Proin luctus tellus ut libero semper semper. Pellentesque ipsum dui, vestibulum ac consequat id, placerat ac enim. Maecenas id vestibulum leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc laoreet, lacus a tincidunt pretium, turpis risus mollis ex, laoreet convallis sem erat vitae risus.

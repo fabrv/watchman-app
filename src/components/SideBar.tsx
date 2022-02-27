@@ -4,7 +4,7 @@ import { IconType } from "react-icons"
 import { FiMenu } from "react-icons/fi"
 
 export interface SideBarProps {
-  onSelect: (event: React.MouseEvent<HTMLAnchorElement>) => void
+  onSelect: (event: string | null) => any
   activeKey?: string
   data: {
     groups: {
@@ -24,7 +24,7 @@ export const SideBar = ({data, onSelect, activeKey}: SideBarProps) => {
 
   return (
     <Nav 
-      onSelect={(e) => console.log(e)} 
+      onSelect={(e) => onSelect(e)}
       defaultActiveKey="/" 
       activeKey={activeKey} 
       variant="pills" 
