@@ -1,4 +1,4 @@
-export type collections = 
+export type collections =
   'projects'
   | 'teams'
   | 'log-types'

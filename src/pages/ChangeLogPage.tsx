@@ -1,4 +1,4 @@
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from 'react-markdown'
 
 export const ChangeLogPage = () => {
   const changes = `
@@ -9,7 +9,9 @@ export const ChangeLogPage = () => {
   return (
     <>
       <h1>Change Log</h1>
-      <ReactMarkdown children={changes} />
+      <ReactMarkdown>
+        {changes}
+      </ReactMarkdown>
     </>
   )
 }

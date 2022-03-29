@@ -27,14 +27,18 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint  './src/**/**.ts' './src/**/**.tsx'",
+    "lint:fix": "eslint './src/**/**.ts' './src/**/**.tsx' --fix"
   },
+  "homepage": ".",
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
   },
+  "eslintIgnore": ["*.test.tsx"],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -48,6 +52,14 @@
     ]
   },
   "devDependencies": {
-    "@types/react-table": "^7.7.9"
+    "@types/react-table": "^7.7.9",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.29.4"
   }
 }

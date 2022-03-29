@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react"
-import { Table } from "react-bootstrap"
+import { useEffect, useMemo, useState } from 'react'
+import { Table } from 'react-bootstrap'
 import { useTable } from 'react-table'
-import { TimeLog, collections } from "../models/Api"
-import { addToStorage } from "../services/storage"
-import { getAll } from "../services/watchman"
-import { toHours, toSeconds } from "../utils/time"
-import { getUniquesFrom, nonStoredIds } from "../utils/utils"
+import { TimeLog, collections } from '../models/Api'
+import { addToStorage } from '../services/storage'
+import { getAll } from '../services/watchman'
+import { toHours, toSeconds } from '../utils/time'
+import { getUniquesFrom, nonStoredIds } from '../utils/utils'
 import ReactMarkdown from 'react-markdown'
 
 interface TimeRow {
@@ -23,7 +23,7 @@ export interface AdminTimesPageProps {
   storage?: Storage
 }
 
-export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) => {
+export const AdminTimesPage = ({ storage = localStorage }: AdminTimesPageProps) => {
   const [data, setData] = useState<TimeRow[]>([])
 
   const columns = useMemo(
@@ -42,27 +42,27 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
       },
       {
         Header: 'Project',
-        accessor: 'project' as keyof TimeRow,
+        accessor: 'project' as keyof TimeRow
       },
       {
         Header: 'Team',
-        accessor: 'team' as keyof TimeRow,
+        accessor: 'team' as keyof TimeRow
       },
       {
         Header: 'Task',
-        accessor: 'tasktype' as keyof TimeRow,
+        accessor: 'tasktype' as keyof TimeRow
       },
       {
         Header: 'Description',
-        accessor: 'description' as keyof TimeRow,
+        accessor: 'description' as keyof TimeRow
       },
       {
         Header: 'Start',
-        accessor: 'start_time' as keyof TimeRow,
+        accessor: 'start_time' as keyof TimeRow
       },
       {
         Header: 'End',
-        accessor: 'end_time' as keyof TimeRow,
+        accessor: 'end_time' as keyof TimeRow
       },
       {
         Header: 'Time',
@@ -70,11 +70,11 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
         Footer: (info: { rows: { values: TimeRow }[] }) => {
           const total = useMemo(
             () => info.rows
-              .map((a: { values: TimeRow }) => {return toSeconds(a.values.time)})
+              .map((a: { values: TimeRow }) => { return toSeconds(a.values.time) })
               .reduce((sum: number, row: number) => sum + row, 0),
             [info.rows]
           )
-          return <span style={{fontWeight: '900'}}>{toHours(total)}</span>
+          return <span style={{ fontWeight: '900' }}>{toHours(total)}</span>
         }
       }
     ],
@@ -85,23 +85,23 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
     headerGroups,
     rows,
     prepareRow,
-    footerGroups,
+    footerGroups
   } = useTable({ columns, data })
 
   useEffect(() => {
     const retrieveData = async () => {
       const dict: [string, collections][] = [
-        ['user_id', 'users']
-        , ['project_id', 'projects']
-        , ['log_type_id', 'log-types']
-        , ['team_id', 'teams']
+        ['user_id', 'users'],
+        ['project_id', 'projects'],
+        ['log_type_id', 'log-types'],
+        ['team_id', 'teams']
       ]
       const timeLogs = await getAll<TimeLog>('time-logs')
-  
-      const allIds = 
+
+      const allIds =
         [...dict].map(([key, storageKey]) => {
           return getUniquesFrom(timeLogs, key)
-          .filter(nonStoredIds(storageKey, storage))
+            .filter(nonStoredIds(storageKey, storage))
         })
 
       const [users, projects, logTypes, teams] = await Promise.all(
@@ -123,13 +123,13 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
           project: project ? project.name : '',
           tasktype: logType ? logType.name : '',
           team: team ? team.name : '',
-          description: ReactMarkdown({children: timeLog.description}),
+          description: ReactMarkdown({ children: timeLog.description }),
           start_time: new Date(timeLog.start_time).toLocaleString(),
           end_time: timeLog.finished ? new Date(timeLog.end_time).toLocaleString() : '-',
           // Calc hours between start time and end time
-          time: 
-            toHours((new Date(timeLog.finished ? timeLog.end_time : new Date()).getTime() 
-            - new Date(timeLog.start_time).getTime()) / 1000),
+          time:
+            toHours((new Date(timeLog.finished ? timeLog.end_time : new Date()).getTime() -
+            new Date(timeLog.start_time).getTime()) / 1000)
         }
       })
 
@@ -143,8 +143,8 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
       <h1>Times</h1>
       <Table variant="dark" responsive>
         <thead>
-          {headerGroups.map(headerGroup => (
-            <tr>
+          {headerGroups.map((headerGroup, i) => (
+            <tr key={i}>
               {headerGroup.headers.map((column, index) => (
                 <th key={index}>
                   {column.render('Header')}
@@ -154,10 +154,10 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
           ))}
         </thead>
         <tbody>
-          {rows.map(row => {
+          {rows.map((row, i) => {
             prepareRow(row)
             return (
-              <tr>
+              <tr key={i}>
                 {row.cells.map((cell, index) => {
                   return (
                     <td key={index}>
@@ -170,8 +170,8 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
           })}
         </tbody>
         <tfoot>
-          {footerGroups.map(group => (
-            <tr>
+          {footerGroups.map((group, i) => (
+            <tr key={i}>
               {group.headers.map((column, index) => (
                 <td key={index}>{column.render('Footer')}</td>
               ))}

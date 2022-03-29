@@ -1,38 +1,38 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, Route, Routes } from 'react-router-dom';
-import './App.css';
-import { AdminProjectsPage } from './pages/AdminProjectsPage';
-import { AdminTeamsPage } from './pages/AdminTeamsPage';
-import { AdminTypesPage } from './pages/AdminTypesPage';
-import { AdminUsersPage } from './pages/AdminUsersPage';
-import { ChangeLogPage } from './pages/ChangeLogPage';
-import { Layout } from './pages/Layout';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { TeamPage } from './pages/TeamPage';
-import { TrackPage } from './pages/TrackPage';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Route, Routes } from 'react-router-dom'
+import './App.css'
+import { AdminProjectsPage } from './pages/AdminProjectsPage'
+import { AdminTeamsPage } from './pages/AdminTeamsPage'
+import { AdminTypesPage } from './pages/AdminTypesPage'
+import { AdminUsersPage } from './pages/AdminUsersPage'
+import { ChangeLogPage } from './pages/ChangeLogPage'
+import { Layout } from './pages/Layout'
+import { ProjectsPage } from './pages/ProjectsPage'
+import { TeamPage } from './pages/TeamPage'
+import { TrackPage } from './pages/TrackPage'
 import { Option } from './models/Option'
-import { AdminTimesPage } from './pages/AdminTimesPage';
+import { AdminTimesPage } from './pages/AdminTimesPage'
 
 const TrackPageLabels = {
   project: 'Project',
   type: 'Type',
   description: 'Description',
-  track: 'Track',
+  track: 'Track'
 }
 
 const availableProjects: Option[] = [
   { id: 1, name: 'Project 1' },
   { id: 2, name: 'Project 2' },
-  { id: 3, name: 'Project 3' },
+  { id: 3, name: 'Project 3' }
 ]
 
 const availableTypes: Option[] = [
   { id: 1, name: 'Type 1' },
   { id: 2, name: 'Type 2' },
-  { id: 3, name: 'Type 3' },
+  { id: 3, name: 'Type 3' }
 ]
 
-function App() {
+function App () {
   return (
     <Layout>
       <Routes>
@@ -47,7 +47,7 @@ function App() {
         <Route path="/admin/types" element={<AdminTypesPage />} />
       </Routes>
     </Layout>
-  );
+  )
 }
 
-export default App;
+export default App

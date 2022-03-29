@@ -1,4 +1,4 @@
-import { Button, Form } from "react-bootstrap"
+import { Button, Form } from 'react-bootstrap'
 import { Option } from '../models/Option'
 
 export interface TrackPageProps {
@@ -45,7 +45,7 @@ export const TrackPage = (props: TrackPageProps) => {
 
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>{props.labels.description}</Form.Label>
-          <Form.Control 
+          <Form.Control
             className='bg-dark text-light'
             as='textarea'>
           </Form.Control>

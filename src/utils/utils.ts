@@ -1,4 +1,4 @@
-import { collections } from "../models/Api"
+import { collections } from '../models/Api'
 
 export const unique = (id: number, index: number, self: number[]) => self.indexOf(id) === index
 

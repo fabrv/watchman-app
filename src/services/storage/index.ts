@@ -1,6 +1,6 @@
-import { collections } from "../../models/Api"
+import { collections } from '../../models/Api'
 
-export function getAll<T>(collection: collections, storage: Storage): T[]{
+export function getAll<T> (collection: collections, storage: Storage): T[] {
   const store = storage.getItem(collection)
   if (store === null) {
     return []
@@ -8,7 +8,7 @@ export function getAll<T>(collection: collections, storage: Storage): T[]{
   return JSON.parse(store)
 }
 
-export function addToStorage<T>(collection: collections, elements: T[], storage: Storage): T[] {
+export function addToStorage<T> (collection: collections, elements: T[], storage: Storage): T[] {
   const store = storage.getItem(collection)
   if (store === null) {
     storage.setItem(collection, JSON.stringify(elements))

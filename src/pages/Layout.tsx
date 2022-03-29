@@ -1,10 +1,11 @@
-import { Col, Container, Row} from 'react-bootstrap';
-import { TopBar } from '../components/TopBar';
+import React from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
+import { TopBar } from '../components/TopBar'
 
-import { SideBar, SideBarProps } from '../components/SideBar';
+import { SideBar } from '../components/SideBar'
 
-import { FiActivity, FiBriefcase, FiClock, FiHome, FiInfo, FiList, FiUsers} from "react-icons/fi";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { FiActivity, FiBriefcase, FiClock, FiHome, FiInfo, FiList, FiUsers } from 'react-icons/fi'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface LayoutProps {
   children: React.ReactNode
@@ -93,7 +94,7 @@ export const Layout = ({ children }: LayoutProps) => {
     const splitedUrl: string[] = url.split('/')
     return '/' + splitedUrl[1] + (splitedUrl[2] != null ? '/' + splitedUrl[2] : '')
   }
-  
+
   return (
     <>
     <TopBar brand="⏲️ Watchman"/>

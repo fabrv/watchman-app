@@ -1,11 +1,11 @@
-import { Col, Container, Nav, Navbar } from "react-bootstrap"
-import { FiLogOut, FiSettings } from "react-icons/fi"
+import { Col, Container, Nav, Navbar } from 'react-bootstrap'
+import { FiLogOut, FiSettings } from 'react-icons/fi'
 
 export interface TopBarProps {
   brand: string
 }
 
-export const TopBar = ({brand}: TopBarProps) => {
+export const TopBar = ({ brand }: TopBarProps) => {
   return (
     <Navbar variant='dark'>
       <Container fluid={true} className='no-gutter'>
