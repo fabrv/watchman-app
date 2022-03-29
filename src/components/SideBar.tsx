@@ -46,6 +46,7 @@ export const SideBar = ({data, onSelect, activeKey}: SideBarProps) => {
                 <Nav.Link 
                   key={index} 
                   eventKey={item.url}
+                  onClick={() => {setCollapsed(false)}}
                 >
                   <span style={{marginRight: '20px'}}><item.icon /></span>
                   {item.name}

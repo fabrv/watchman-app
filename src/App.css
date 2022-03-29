@@ -3,7 +3,8 @@
 }
 
 body {
-  font-size: .875rem;
+  font-size: 1rem;
+  font-weight: normal;
 }
 
 .feather {
@@ -164,6 +165,19 @@ body {
 @font-face {
   font-family: KumbhSans;
   src: url('./fonts/KumbhSans-Regular.ttf');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: KumbhSans;
+  src: url('./fonts/KumbhSans-Bold.ttf');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: KumbhSans;
+  src: url('./fonts/KumbhSans-Light.ttf');
+  font-weight: light;
 }
 
 .content {

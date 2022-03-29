@@ -6,13 +6,14 @@ import { addToStorage } from "../services/storage"
 import { getAll } from "../services/watchman"
 import { toHours, toSeconds } from "../utils/time"
 import { getUniquesFrom, nonStoredIds } from "../utils/utils"
+import ReactMarkdown from 'react-markdown'
 
 interface TimeRow {
   user: string
   project: string
   tasktype: string
   team: string
-  description: string
+  description: any
   start_time: string
   end_time: string
   time: string
@@ -73,7 +74,7 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
               .reduce((sum: number, row: number) => sum + row, 0),
             [info.rows]
           )
-          return <>Total: {toHours(total)}</>
+          return <span style={{fontWeight: '900'}}>{toHours(total)}</span>
         }
       }
     ],
@@ -122,7 +123,7 @@ export const AdminTimesPage = ({storage = localStorage}: AdminTimesPageProps) =>
           project: project ? project.name : '',
           tasktype: logType ? logType.name : '',
           team: team ? team.name : '',
-          description: timeLog.description,
+          description: ReactMarkdown({children: timeLog.description}),
           start_time: new Date(timeLog.start_time).toLocaleString(),
           end_time: timeLog.finished ? new Date(timeLog.end_time).toLocaleString() : '-',
           // Calc hours between start time and end time
