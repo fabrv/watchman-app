@@ -3,8 +3,8 @@ import { TopBar } from '../components/TopBar';
 
 import { SideBar, SideBarProps } from '../components/SideBar';
 
-import { FiActivity, FiBriefcase, FiHome, FiInfo, FiList, FiUsers} from "react-icons/fi";
-import { useNavigate } from 'react-router-dom';
+import { FiActivity, FiBriefcase, FiClock, FiHome, FiInfo, FiList, FiUsers} from "react-icons/fi";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface LayoutProps {
   children: React.ReactNode
@@ -45,6 +45,12 @@ const menuItems = {
       name: 'Admin',
       items: [
         {
+          icon: FiClock,
+          name: 'Times',
+          url: '/admin/times',
+          active: true
+        },
+        {
           icon: FiUsers,
           name: 'Users',
           url: '/admin/users',
@@ -75,11 +81,17 @@ const menuItems = {
 
 export const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate()
+  const location = useLocation()
   const onSideBarSelect = (e: string | null) => {
     // Navigate to selected page with react-router
     if (e !== null) {
       navigate(e)
     }
+  }
+
+  const firstTwoRoutes = (url: string) => {
+    const splitedUrl: string[] = url.split('/')
+    return '/' + splitedUrl[1] + (splitedUrl[2] != null ? '/' + splitedUrl[2] : '')
   }
   
   return (
@@ -89,7 +101,7 @@ export const Layout = ({ children }: LayoutProps) => {
     <Container fluid={true} className='no-gutter'>
       <Row>
         <Col>
-          <SideBar data={menuItems} onSelect={onSideBarSelect} />
+          <SideBar activeKey={firstTwoRoutes(location.pathname)} data={menuItems} onSelect={onSideBarSelect} />
         </Col>
         <Col md={9}>
           <div className='content text-light'>

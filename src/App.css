@@ -102,6 +102,23 @@ body {
   padding-left: 0;
 }
 
+.table-dark td, .table-dark th, .table-dark thead th {
+  border-color: #454d55 !important;
+}
+
+.table-dark {
+  color: #fff;
+  --bs-table-bg: var(--bs-dark);
+}
+
+.table-dark > :not(:first-child){
+  border-top: none;
+}
+
+.bg-dark {
+  background-color: var(--bs-dark) !important;
+}
+
 .row {
   --bs-gutter-x: 0;
 }
