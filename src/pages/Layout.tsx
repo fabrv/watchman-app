@@ -43,11 +43,11 @@ const menuItems = {
       ]
     },
     {
-      name: 'Admin',
+      name: 'Manage',
       items: [
         {
           icon: FiClock,
-          name: 'Times',
+          name: 'Time Logs',
           url: '/admin/times',
           active: true
         },
@@ -104,7 +104,7 @@ export const Layout = ({ children }: LayoutProps) => {
         <Col>
           <SideBar activeKey={firstTwoRoutes(location.pathname)} data={menuItems} onSelect={onSideBarSelect} />
         </Col>
-        <Col md={9}>
+        <Col md={10}>
           <div className='content text-light'>
             {children}
           </div>

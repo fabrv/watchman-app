@@ -1,5 +1,10 @@
 :root {
   --bs-dark: #343a40;
+  --bs-primary: #0d6efd;
+  --bs-primary-opaque: rgba(13, 109, 253, 0.6);
+  --bs-success-opaque: rgba(14, 152, 14, 0.6);
+  --bs-warning-opaque: rgba(255, 255, 0, 0.6);
+  --bs-danger-opaque: rgba(255, 0, 0, 0.6);
 }
 
 body {
@@ -222,8 +227,15 @@ select, input, .form-control {
   }
 }
 
-.btn, select, input, .form-control {
+.btn, select, input[type=text], .form-control {
   border-radius: 8px !important;
+}
+
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: -1px;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-left: none;
 }
 
 .loader {
@@ -319,9 +331,28 @@ a:hover {
   text-decoration: none;
 }
 
+.table {
+  background-color: var(--bs-dark);
+  border-radius: 8px;
+}
+
 .table img, .team-label img {
   max-width: 200px;
   max-height: 200px;
+}
+
+.table th {
+  font-size: small;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
+
+.table td, .table th {
+  padding: .75rem;
+}
+
+.table td p {
+  margin: 0;
 }
 
 .team-label h1, .team-label h2, .team-label h3, .team-label h3, .team-label h5, .team-label h6{
@@ -399,4 +430,16 @@ img {
 
 .tt:hover .tt-text {
   visibility: visible;
+}
+
+.tag {
+  border-radius: .475rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 7px;
+  margin-right: 0.25rem;
+  color: var(--bs-light);
+  opacity: 0.8;
+  font-size: .7rem;
+  /* text-transform: uppercase; */
 }
