@@ -7,7 +7,7 @@ export type collections =
   | 'users'
 
 export interface Model {
-  id: string;
+  id: string | number;
   name: string;
   description: string;
   created_at: string;

@@ -9,7 +9,7 @@ export const TopBar = ({ brand }: TopBarProps) => {
   return (
     <Navbar variant='dark'>
       <Container fluid={true} className='no-gutter'>
-        <Col md={3}>
+        <Col md={2}>
           <Navbar.Brand>{brand}</Navbar.Brand>
         </Col>
         <Nav className="justify-content-end">
