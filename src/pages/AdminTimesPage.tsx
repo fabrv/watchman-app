@@ -8,7 +8,7 @@ import { toHours, toSeconds } from '../utils/time'
 import { getUniquesFrom, nonStoredIds } from '../utils/utils'
 import { ActionBar, FilterOption } from '../components/ActionBar/ActionBar'
 import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
-import { FiEdit2 } from 'react-icons/fi'
+import { FiEdit2, FiFilter } from 'react-icons/fi'
 import { TextAndTags } from '../components/Tags/TextAndTags'
 import { RowActionPopUp } from '../components/RowActionPopUp/RowActionPopUp'
 import { StatusTags } from '../components/StatusTag'
@@ -47,7 +47,7 @@ export const AdminTimesPage = ({ storage = sessionStorage, title = 'Time Logs' }
       props: {
         id: 'users',
         onChange: () => undefined,
-        caption: 'Users',
+        caption: <><FiFilter/> Users</>,
         value: users,
         searchKey: 'name'
       }
@@ -117,8 +117,7 @@ export const AdminTimesPage = ({ storage = sessionStorage, title = 'Time Logs' }
       0,
       userIds.length > 0 ? userIds : undefined,
       'user_ids',
-      from,
-      to
+      { from, to }
     )
 
     const allIds =

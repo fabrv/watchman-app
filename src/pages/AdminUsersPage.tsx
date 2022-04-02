@@ -2,21 +2,27 @@ import { useEffect, useMemo, useState } from 'react'
 import { Table } from 'react-bootstrap'
 import { useTable } from 'react-table'
 import { getAll } from '../services/watchman'
-// import { ActionBar } from '../components/ActionBar/ActionBar'
-// import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
-import { FiEdit2, FiTrash } from 'react-icons/fi'
+import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
+import { FiEdit2, FiFilter, FiTrash } from 'react-icons/fi'
 import { RowActionPopUp, RowActionOption } from '../components/RowActionPopUp/RowActionPopUp'
-import { User } from '../models/Api'
+import { User, Role } from '../models/Api'
 import { PageProps } from '../models/Page'
+import { TextAndTags } from '../components/Tags/TextAndTags'
+import { ActionBar, FilterOption } from '../components/ActionBar/ActionBar'
+import { SelectFilter } from '../components/SelectFilter/SelectFilter'
+import { addToStorage } from '../services/storage'
+import { InputFilter } from '../components/InputFilter/InputFilter'
 
 interface TimeRow {
   user: any
-  role: any
   createdAt: any
 }
 
 export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: PageProps) => {
   const [data, setData] = useState<TimeRow[]>([])
+  const [roles, setRoles] = useState<any[]>([])
+  const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([])
+  const [search, setSearch] = useState<string>('')
   const [, setUsers] = useState<User[]>([])
 
   const editOptions: RowActionOption[] = [
@@ -49,10 +55,6 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
         }
       },
       {
-        Header: 'Role',
-        accessor: 'role' as keyof TimeRow
-      },
-      {
         Header: 'Created At',
         accessor: 'createdAt' as keyof TimeRow
       }
@@ -67,21 +69,29 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
     footerGroups
   } = useTable({ columns, data })
 
-  const retrieveData = async (ids: number[] = []) => {
+  const retrieveRoles = async () => {
+    const allRoles = await getAll<Role[]>('roles', 1000, 0)
+
+    setRoles(allRoles)
+  }
+
+  const retrieveData = async (roleIds: number[] = [], searchField: string) => {
     const allUsers = await getAll<User>(
       'users',
       100,
       0,
-      ids.length > 0 ? ids : undefined
+      roleIds.length > 0 ? roleIds : undefined,
+      'role_ids',
+      { textSearch: { field: 'name', value: searchField } }
     )
 
+    addToStorage('users', allUsers, storage)
     setUsers(allUsers)
 
     const result: TimeRow[] = allUsers.map(user => {
       return {
-        user: user.name + ' ' + user.email,
-        role: user.role.name,
-        createdAt: user.created_at
+        user: TextAndTags(`**${user.name}** (${user.email})`, [user.role.name]),
+        createdAt: new Date(user.created_at).toLocaleString('en-GB').substring(0, 10)
       }
     })
 
@@ -89,21 +99,54 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
   }
 
   useEffect(() => {
-    retrieveData()
+    retrieveData(selectedRoleIds, search)
+  }, [selectedRoleIds.length, search])
+
+  useEffect(() => {
+    retrieveRoles()
   }, [])
+
+  const handleFilterChange = (filters: Record<string, any>) => {
+    const roles: number[] = filters.role || []
+    setSearch(filters.user || '')
+    setSelectedRoleIds(roles)
+  }
+
+  const filters: FilterOption[] = [
+    {
+      Component: InputFilter,
+      key: 'user',
+      props: {
+        id: 'user',
+        value: '',
+        onChange: () => undefined
+      }
+    },
+    {
+      Component: SelectFilter,
+      key: 'role',
+      props: {
+        id: 'role',
+        value: roles,
+        caption: <><FiFilter/> Roles</>,
+        searchKey: 'name',
+        onChange: () => undefined
+      }
+    }
+  ]
 
   return (
     <>
       <h1>{title}</h1>
-      {/* <ActionBar
+      <ActionBar
         exportOptions={[
           { id: 'csv', icon: FaFileCsv, value: 'CSV' },
           { id: 'excel', icon: FaFileExcel, value: 'Excel' }
         ]}
-        filterOption={{ id: 'userIds', value: 'Users', data: users }}
+        filters={filters}
         onExportClick={(id: string) => console.log(id)}
-        onChange={retrieveData}
-      /> */}
+        onChange={handleFilterChange}
+      />
       <Table variant="dark" responsive>
         <thead>
           {headerGroups.map((headerGroup, i) => (

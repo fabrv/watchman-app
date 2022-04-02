@@ -8,7 +8,7 @@
 .input-group-text {
   background-color: #FFF;
   border-right: none;
-  font-size: 0.85em;
+  font-size: 0.9rem;
 }
 
 .filter-select .form-control, .filter-select input[type=checkbox] { 
