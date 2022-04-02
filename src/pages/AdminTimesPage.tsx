@@ -6,9 +6,16 @@ import { addToStorage } from '../services/storage'
 import { getAll } from '../services/watchman'
 import { toHours, toSeconds } from '../utils/time'
 import { getUniquesFrom, nonStoredIds } from '../utils/utils'
-import { ActionBar } from '../components/ActionBar/ActionBar'
+import { ActionBar, FilterOption } from '../components/ActionBar/ActionBar'
 import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
+import { FiEdit2 } from 'react-icons/fi'
 import { TextAndTags } from '../components/Tags/TextAndTags'
+import { RowActionPopUp } from '../components/RowActionPopUp/RowActionPopUp'
+import { StatusTags } from '../components/StatusTag'
+import { timeRow } from '../components/TimeRow'
+import { PageProps } from '../models/Page'
+import { FilterSelect } from '../components/FilterSelect/FilterSelect'
+import { DateFilter } from '../components/DateFilter/DateFilter'
 
 interface TimeRow {
   user: any
@@ -18,37 +25,34 @@ interface TimeRow {
   status: any
 }
 
-const statusTags = (finished: boolean, duration: number) => {
-  return (
-    finished
-      ? <span className='tag' style={{ backgroundColor: 'var(--bs-primary-opaque)' }}>Finished</span>
-      : ((duration / 3.6e6) < 8
-          ? <span className='tag' style={{ backgroundColor: 'var(--bs-success-opaque)' }}>Running</span>
-          : <span className='tag' style={{ backgroundColor: 'var(--bs-danger-opaque)' }}>Overtime</span>)
-  )
-}
-
-const timeRow = (starTime: string, endTime: string, finished: boolean) => {
-  const start = new Date(starTime).toLocaleString('en-GB')
-  const end = finished ? new Date(endTime).toLocaleString('en-GB') : ''
-
-  return (
-    <div>
-      <b>
-        {start.substring(12, 17)} - {end.substring(12, 17)}
-      </b><br/>
-      {start.substring(0, 10)}
-    </div>
-  )
-}
-
-export interface AdminTimesPageProps {
-  storage?: Storage
-}
-
-export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps) => {
+export const AdminTimesPage = ({ storage = sessionStorage, title = 'Time Logs' }: PageProps) => {
   const [data, setData] = useState<TimeRow[]>([])
   const [users, setUsers] = useState<User[]>([])
+
+  const [usersFilter, setUsersFilter] = useState<number[]>([])
+  const [dateFilter, setDateFilter] = useState<{from: Date, to: Date}>({ from: new Date(new Date().getTime() - (60 * 60 * 24 * 7 * 1000)), to: new Date() })
+
+  const filterOptions: FilterOption[] = [
+    {
+      Component: DateFilter,
+      key: 'date',
+      props: {
+        id: 'date',
+        onChange: () => undefined
+      }
+    },
+    {
+      Component: FilterSelect,
+      key: 'userIds',
+      props: {
+        id: 'users',
+        onChange: () => undefined,
+        caption: 'Users',
+        value: users,
+        searchKey: 'name'
+      }
+    }
+  ]
 
   const columns = useMemo(
     () => [
@@ -100,7 +104,7 @@ export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps
     footerGroups
   } = useTable({ columns, data })
 
-  const retrieveData = async (filteredUserIds: number[] = []) => {
+  const retrieveData = async (userIds: number[], from: Date, to: Date) => {
     const dict: [string, collections][] = [
       ['user_id', 'users'],
       ['project_id', 'projects'],
@@ -111,8 +115,10 @@ export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps
       'time-logs',
       100,
       0,
-      filteredUserIds.length > 0 ? filteredUserIds : undefined,
-      'user_ids'
+      userIds.length > 0 ? userIds : undefined,
+      'user_ids',
+      from,
+      to
     )
 
     const allIds =
@@ -146,7 +152,7 @@ export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps
         duration:
           toHours((new Date(timeLog.finished ? timeLog.end_time : new Date()).getTime() -
           new Date(timeLog.start_time).getTime()) / 1000),
-        status: statusTags(
+        status: StatusTags(
           timeLog.finished,
           (new Date(timeLog.finished ? timeLog.end_time : new Date()).getTime() - new Date(timeLog.start_time).getTime())
         )
@@ -156,22 +162,32 @@ export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps
     setData(result)
   }
 
+  const handleFilterChange = (e: Record<string, any>) => {
+    const userIds: number[] = e.userIds || []
+    const date: { from: Date, to: Date } = e.date || dateFilter
+
+    setDateFilter(date)
+    setUsersFilter(userIds)
+  }
+
   useEffect(() => {
-    retrieveData()
-  }, [])
+    retrieveData(usersFilter, dateFilter?.from, dateFilter?.to)
+  }, [dateFilter, usersFilter.length])
 
   return (
     <>
-      <h1>Time Logs</h1>
+      <h1>{title}</h1>
+
       <ActionBar
+        onChange={handleFilterChange}
         exportOptions={[
-          { id: 'csv', icon: FaFileCsv, name: 'CSV' },
-          { id: 'excel', icon: FaFileExcel, name: 'Excel' }
+          { id: 'csv', icon: FaFileCsv, value: 'CSV' },
+          { id: 'excel', icon: FaFileExcel, value: 'Excel' }
         ]}
-        filterOption={{ id: 'userIds', name: 'Users', data: users }}
+        filters={filterOptions}
         onExportClick={(id: string) => console.log(id)}
-        onFilterValueChange={retrieveData}
       />
+
       <Table variant="dark" responsive>
         <thead>
           {headerGroups.map((headerGroup, i) => (
@@ -181,6 +197,7 @@ export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps
                   {column.render('Header')}
                 </th>
               ))}
+              <th style={{ width: '1.5rem' }}></th>
             </tr>
           ))}
         </thead>
@@ -196,6 +213,9 @@ export const AdminTimesPage = ({ storage = sessionStorage }: AdminTimesPageProps
                     </td>
                   )
                 })}
+                <td>
+                  <RowActionPopUp onClick={(e) => console.log(e)} options={[{ id: 0, value: 'Edit', icon: FiEdit2 }]} />
+                </td>
               </tr>
             )
           })}

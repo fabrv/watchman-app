@@ -1,0 +1,9 @@
+.btn-row-action-pop-up {
+  background-color: var(--bs-dark);
+  border: none;
+  margin: 0;
+}
+
+.btn-row-action-pop-up::after {
+  content: none;
+}

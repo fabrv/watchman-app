@@ -21,15 +21,15 @@ const TrackPageLabels = {
 }
 
 const availableProjects: Option[] = [
-  { id: 1, name: 'Project 1' },
-  { id: 2, name: 'Project 2' },
-  { id: 3, name: 'Project 3' }
+  { id: 1, value: 'Project 1' },
+  { id: 2, value: 'Project 2' },
+  { id: 3, value: 'Project 3' }
 ]
 
 const availableTypes: Option[] = [
-  { id: 1, name: 'Type 1' },
-  { id: 2, name: 'Type 2' },
-  { id: 3, name: 'Type 3' }
+  { id: 1, value: 'Type 1' },
+  { id: 2, value: 'Type 2' },
+  { id: 3, value: 'Type 3' }
 ]
 
 function App () {

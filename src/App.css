@@ -179,12 +179,6 @@ body {
   font-weight: bold;
 }
 
-@font-face {
-  font-family: KumbhSans;
-  src: url('./fonts/KumbhSans-Light.ttf');
-  font-weight: light;
-}
-
 .content {
   padding: 1rem;
   height: calc(100vh - 56px);
@@ -198,10 +192,16 @@ h1, h2, h3 {
 body {
   font-family: 'KumbhSans', Arial, sans-serif;
   background-color: #21252B;
+  font-size: 0.9rem;
 }
 
 select, input, .form-control {
   border: none !important;
+  font-size: 0.9rem;
+}
+
+.btn {
+  font-size: 0.9rem;
 }
 
 .collapsible-content {
@@ -441,5 +441,42 @@ img {
   color: var(--bs-light);
   opacity: 0.8;
   font-size: .7rem;
-  /* text-transform: uppercase; */
+}
+
+.btn-popup {
+  display: flexbox;
+  text-align: left;
+  position: relative;
+  padding-right: 1.5rem;
+}
+
+.btn-popup::after {
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+  top:50%;
+  transform: translateY(-50%);
+  margin-left: .255em;
+  vertical-align: .255em;
+  content: "";
+  border-top: .3em solid;
+    border-top-color: currentcolor;
+    border-top-style: solid;
+    border-top-width: 0.3em;
+  border-right: .3em solid transparent;
+    border-right-color: transparent;
+    border-right-style: solid;
+    border-right-width: 0.3em;
+  border-bottom: 0;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: 0px;
+  border-left: .3em solid transparent;
+    border-left-color: transparent;
+    border-left-style: solid;
+    border-left-width: 0.3em;
+}
+
+.rich-popup {
+  position: relative;
 }

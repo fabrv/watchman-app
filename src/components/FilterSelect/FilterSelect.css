@@ -1,11 +1,8 @@
 .filter-tag {
-  padding: 6px;
+  display: inline-block;
   background-color: var(--bs-primary);
-  border-radius: 4px;
   color: var(--bs-light);
-  font-weight: bold;
-  margin: 0px 0.5rem 0px 0;
-  font-size: small;
+  margin: 0 0.2rem 0.1rem 0;
 }
 
 .input-group-text {
@@ -22,38 +19,4 @@
 
 .filter-select input[type=checkbox] {
   border-left: 1px solid #ced4da !important;
-}
-
-.btn-filter-select {
-  text-align: left;
-  min-width: 200px;
-  position: relative;
-  padding-right: 1.5rem;
-}
-
-.btn-filter-select::after {
-  display: inline-block;
-  position: absolute;
-  right: 15px;
-  top:50%;
-  transform: translateY(-50%);
-  margin-left: .255em;
-  vertical-align: .255em;
-  content: "";
-  border-top: .3em solid;
-    border-top-color: currentcolor;
-    border-top-style: solid;
-    border-top-width: 0.3em;
-  border-right: .3em solid transparent;
-    border-right-color: transparent;
-    border-right-style: solid;
-    border-right-width: 0.3em;
-  border-bottom: 0;
-    border-bottom-color: currentcolor;
-    border-bottom-style: none;
-    border-bottom-width: 0px;
-  border-left: .3em solid transparent;
-    border-left-color: transparent;
-    border-left-style: solid;
-    border-left-width: 0.3em;
 }
