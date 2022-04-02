@@ -14,7 +14,7 @@ import { RowActionPopUp } from '../components/RowActionPopUp/RowActionPopUp'
 import { StatusTags } from '../components/StatusTag'
 import { timeRow } from '../components/TimeRow'
 import { PageProps } from '../models/Page'
-import { FilterSelect } from '../components/FilterSelect/FilterSelect'
+import { SelectFilter } from '../components/SelectFilter/SelectFilter'
 import { DateFilter } from '../components/DateFilter/DateFilter'
 
 interface TimeRow {
@@ -42,7 +42,7 @@ export const AdminTimesPage = ({ storage = sessionStorage, title = 'Time Logs' }
       }
     },
     {
-      Component: FilterSelect,
+      Component: SelectFilter,
       key: 'userIds',
       props: {
         id: 'users',

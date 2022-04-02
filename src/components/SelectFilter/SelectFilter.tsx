@@ -5,7 +5,7 @@ import { FilterProps } from '../../models/FilterComponents'
 import { Option } from '../../models/Option'
 import { Model } from '../../models/Api'
 
-import './FilterSelect.css'
+import './SelectFilter.css'
 
 interface PopUpFilterProps {
   name: string
@@ -75,7 +75,7 @@ const PopUpFilter = ({ name, data, searchKey, onCheck, show, onHide, labels, dis
   </div>)
 }
 
-export const FilterSelect = ({ id, caption, value, onChange, searchKey }: FilterProps) => {
+export const SelectFilter = ({ id, caption, value, onChange, searchKey }: FilterProps) => {
   const [selectedFields, setSelectedFields] = useState<Option[]>([])
   const [searchData, setSearchData] = useState<any[]>([])
   const [showPopUp, setShowPopUp] = useState(false)
