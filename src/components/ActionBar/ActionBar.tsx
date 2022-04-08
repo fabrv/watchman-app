@@ -1,9 +1,11 @@
 import { FC, ReactChild, useEffect, useState } from 'react'
 import { Dropdown } from 'react-bootstrap'
 import { IconType } from 'react-icons'
-import { FiDownload } from 'react-icons/fi'
+import { FiDownload, FiPlus } from 'react-icons/fi'
+import { Field } from '../../models/Field'
 import { FilterProps } from '../../models/FilterComponents'
 import { Option } from '../../models/Option'
+import { FormModal } from '../FormModal/FormModal'
 
 import './ActionBar.css'
 
@@ -20,12 +22,24 @@ interface ExportOption extends Option {
 export interface ActionBarProps {
   filters: FilterOption[]
   exportOptions: ExportOption[]
+  showNew: boolean
+  newFields?: Field[]
+  newCaption?: string
   onChange: (filterValues: Record<string, any>) => void
   onExportClick: (clickedItem: string) => void
   children?: ReactChild
 }
 
-export const ActionBar = ({ filters, exportOptions, onChange, onExportClick, children }: ActionBarProps) => {
+export const ActionBar = ({
+  filters,
+  exportOptions,
+  onChange,
+  showNew,
+  newCaption = 'New',
+  newFields = [],
+  onExportClick,
+  children
+}: ActionBarProps) => {
   const [filtersValue, setFiltersValue] = useState<Record<string, any>>({})
 
   const handleFilterValueChange = (key: string, value: any) => {
@@ -64,6 +78,18 @@ export const ActionBar = ({ filters, exportOptions, onChange, onExportClick, chi
           ))}
         </Dropdown.Menu>
       </Dropdown>
+
+      { showNew && (
+        <FormModal
+          title={newCaption}
+          show={false}
+          fields={newFields}
+          variant='dark'
+          onSubmit={(e) => { console.log(e) }}
+        >
+          <FiPlus/> {' '} {newCaption}
+        </FormModal>
+      )}
     </div>
   )
 }

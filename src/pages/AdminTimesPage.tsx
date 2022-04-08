@@ -184,6 +184,7 @@ export const AdminTimesPage = ({ storage = sessionStorage, title = 'Time Logs' }
           { id: 'excel', icon: FaFileExcel, value: 'Excel' }
         ]}
         filters={filterOptions}
+        showNew={false}
         onExportClick={(id: string) => console.log(id)}
       />
 

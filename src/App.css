@@ -1,10 +1,15 @@
 :root {
   --bs-dark: #343a40;
-  --bs-primary: #0d6efd;
+  --bs-primary: #2065cc;
   --bs-primary-opaque: rgba(13, 109, 253, 0.6);
   --bs-success-opaque: rgba(14, 152, 14, 0.6);
   --bs-warning-opaque: rgba(255, 255, 0, 0.6);
   --bs-danger-opaque: rgba(255, 0, 0, 0.6);
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
 }
 
 body {
@@ -161,6 +166,7 @@ body {
   color: #fff;
   background-color: rgba(255, 255, 255, .1);
   border-color: rgba(255, 255, 255, .1);
+  transition: background-color .2s ease;
 }
 
 .form-control-dark:focus {
@@ -198,6 +204,10 @@ body {
 select, input, .form-control {
   border: none !important;
   font-size: 0.9rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 .25rem rgba(211,212,213,.5);
 }
 
 .btn {
