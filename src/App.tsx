@@ -12,6 +12,7 @@ import { TeamPage } from './pages/TeamPage'
 import { TrackPage } from './pages/TrackPage'
 import { Option } from './models/Option'
 import { AdminTimesPage } from './pages/AdminTimesPage'
+import { LandingPage } from './pages/LandingPage'
 
 const TrackPageLabels = {
   project: 'Project',
@@ -33,10 +34,24 @@ const availableTypes: Option[] = [
 ]
 
 function App () {
+  const isAuthorized = false
+
+  if (!isAuthorized) {
+    return <LandingPage />
+  }
+
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<TrackPage labels={TrackPageLabels} availableProjects={availableProjects} availableTypes={availableTypes} />} />
+        <Route path="/"
+          element={
+            <TrackPage
+              labels={TrackPageLabels}
+              availableProjects={availableProjects}
+              availableTypes={availableTypes}
+            />
+          }
+        />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/changelog" element={<ChangeLogPage />} />
