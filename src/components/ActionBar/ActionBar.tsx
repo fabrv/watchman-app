@@ -1,14 +1,18 @@
-import { ReactChild } from 'react'
+import { FC, ReactChild, useEffect, useState } from 'react'
 import { Dropdown } from 'react-bootstrap'
 import { IconType } from 'react-icons'
-import { FiDownload } from 'react-icons/fi'
+import { FiDownload, FiPlus } from 'react-icons/fi'
+import { Field } from '../../models/Field'
+import { FilterProps } from '../../models/FilterComponents'
 import { Option } from '../../models/Option'
-import { FilterSelect } from '../FilterSelect/FilterSelect'
+import { FormModal } from '../FormModal/FormModal'
 
 import './ActionBar.css'
 
-interface FilterOption extends Option {
-  data: any[]
+export interface FilterOption {
+  key: string
+  props: FilterProps
+  Component: FC<FilterProps>
 }
 
 interface ExportOption extends Option {
@@ -16,24 +20,49 @@ interface ExportOption extends Option {
 }
 
 export interface ActionBarProps {
-  filterOption: FilterOption
+  filters: FilterOption[]
   exportOptions: ExportOption[]
-  onFilterValueChange: (selectedIds: number[]) => void
+  showNew: boolean
+  newFields?: Field[]
+  newCaption?: string
+  onChange: (filterValues: Record<string, any>) => void
   onExportClick: (clickedItem: string) => void
   children?: ReactChild
 }
 
-export const ActionBar = ({ filterOption, exportOptions, onFilterValueChange, onExportClick, children }: ActionBarProps) => {
+export const ActionBar = ({
+  filters,
+  exportOptions,
+  onChange,
+  showNew,
+  newCaption = 'New',
+  newFields = [],
+  onExportClick,
+  children
+}: ActionBarProps) => {
+  const [filtersValue, setFiltersValue] = useState<Record<string, any>>({})
+
+  const handleFilterValueChange = (key: string, value: any) => {
+    const newFiltersValue = { ...filtersValue }
+    newFiltersValue[key] = value
+    setFiltersValue(newFiltersValue)
+  }
+
+  useEffect(() => {
+    onChange(filtersValue)
+  }, [filtersValue])
+
   return (
     <div className='action-bar'>
       {children}
 
-      <FilterSelect
-        name={filterOption.id.toString()}
-        caption={`Filter ${filterOption.name}`}
-        data={filterOption.data}
-        onChange={onFilterValueChange}
-      />
+      {
+        filters.map(({ Component, key, props }) => {
+          return (
+            <Component key={key} {...props} onChange={(e) => handleFilterValueChange(key, e)}/>
+          )
+        })
+      }
 
       <Dropdown>
         <Dropdown.Toggle variant="dark" id="dropdown-basic">
@@ -44,11 +73,23 @@ export const ActionBar = ({ filterOption, exportOptions, onFilterValueChange, on
           {exportOptions.map((option, i) => (
             <Dropdown.Item onClick={() => onExportClick(option.id.toString())} key={i}>
               <option.icon/> {' '}
-              {option.name}
+              {option.value}
             </Dropdown.Item>
           ))}
         </Dropdown.Menu>
       </Dropdown>
+
+      { showNew && (
+        <FormModal
+          title={newCaption}
+          show={false}
+          fields={newFields}
+          variant='dark'
+          onSubmit={(e) => { console.log(e) }}
+        >
+          <FiPlus/> {' '} {newCaption}
+        </FormModal>
+      )}
     </div>
   )
 }

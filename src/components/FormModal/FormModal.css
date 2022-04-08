@@ -1,0 +1,12 @@
+.modal-content {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+}
+
+.modal-body {
+  padding: 2rem 3rem 2rem 3rem;
+}
+
+.modal-body .form-group {
+  margin-bottom: 2rem;
+}

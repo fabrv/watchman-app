@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Button, Form, InputGroup, ListGroup } from 'react-bootstrap'
 import { FiSearch, FiX } from 'react-icons/fi'
+import { FilterProps } from '../../models/FilterComponents'
 import { Option } from '../../models/Option'
+import { Model } from '../../models/Api'
 
-import './FilterSelect.css'
-
-interface FilterSelectProps {
-  name: string
-  caption: string
-  data: any[]
-  onChange: (selectedIds: number[]) => void
-  searchKey?: string
-}
+import './SelectFilter.css'
 
 interface PopUpFilterProps {
   name: string
@@ -28,10 +22,10 @@ interface PopUpFilterProps {
 }
 
 const FilterTag = (option: Option, onClick: (e: number) => void) => (
-  <span onClick={() => onClick(option.id as number)} className='filter-tag'>
-    {option.name} {' '}
+  <div key={option.id} onClick={() => onClick(option.id as number)} className='tag filter-tag'>
+    {option.value} {' '}
     <FiX/>
-  </span>
+  </div>
 )
 
 const PopUpFilter = ({ name, data, searchKey, onCheck, show, onHide, labels, displayedField = 'name' }: PopUpFilterProps) => {
@@ -81,27 +75,27 @@ const PopUpFilter = ({ name, data, searchKey, onCheck, show, onHide, labels, dis
   </div>)
 }
 
-export const FilterSelect = ({ name, caption, data, onChange, searchKey = 'name' }: FilterSelectProps) => {
+export const SelectFilter = ({ id, caption, value, onChange, searchKey }: FilterProps) => {
   const [selectedFields, setSelectedFields] = useState<Option[]>([])
   const [searchData, setSearchData] = useState<any[]>([])
   const [showPopUp, setShowPopUp] = useState(false)
 
   useEffect(() => {
     const selectedIds = selectedFields.map(field => field.id)
-    setSearchData(data.filter(f => !selectedIds.includes(f.id)))
-  }, [data])
+    setSearchData(value.filter((f: Model) => !selectedIds.includes(f.id)))
+  }, [value])
 
   const onFilterCheck = (e: {value: number, checked: boolean}) => {
     if (e.checked) {
       const selectedIds = selectedFields.map(field => field.id)
-      setSelectedFields([...selectedFields, { id: e.value, name: data.find(f => f.id === e.value)[searchKey] }])
+      setSelectedFields([...selectedFields, { id: e.value, value: value.find((f: Model) => f.id === e.value)[searchKey] }])
       setSearchData(searchData.filter(f => f.id !== e.value && !selectedIds.includes(f.id)))
     }
   }
 
   const onTagClick = (id: number) => {
     setSelectedFields(selectedFields.filter(field => field.id !== id))
-    setSearchData([...searchData, data.find(f => f.id === id)])
+    setSearchData([...searchData, value.find((f: Model) => f.id === id)])
   }
 
   useEffect(() => {
@@ -118,7 +112,7 @@ export const FilterSelect = ({ name, caption, data, onChange, searchKey = 'name'
     <div className='filter-select' style={{ position: 'relative' }}>
       <Button
         variant='light'
-        className='btn-filter-select'
+        className='btn-popup'
         id='filter-select'
         onClick={onFilterSelectClick}
       >
@@ -126,7 +120,7 @@ export const FilterSelect = ({ name, caption, data, onChange, searchKey = 'name'
         {selectedFields.length < 1 && caption}
       </Button>
       <PopUpFilter
-        name={name}
+        name={id}
         data={searchData}
         searchKey={searchKey}
         onCheck={onFilterCheck}

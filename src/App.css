@@ -1,10 +1,15 @@
 :root {
   --bs-dark: #343a40;
-  --bs-primary: #0d6efd;
+  --bs-primary: #2065cc;
   --bs-primary-opaque: rgba(13, 109, 253, 0.6);
   --bs-success-opaque: rgba(14, 152, 14, 0.6);
   --bs-warning-opaque: rgba(255, 255, 0, 0.6);
   --bs-danger-opaque: rgba(255, 0, 0, 0.6);
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
 }
 
 body {
@@ -161,6 +166,7 @@ body {
   color: #fff;
   background-color: rgba(255, 255, 255, .1);
   border-color: rgba(255, 255, 255, .1);
+  transition: background-color .2s ease;
 }
 
 .form-control-dark:focus {
@@ -179,12 +185,6 @@ body {
   font-weight: bold;
 }
 
-@font-face {
-  font-family: KumbhSans;
-  src: url('./fonts/KumbhSans-Light.ttf');
-  font-weight: light;
-}
-
 .content {
   padding: 1rem;
   height: calc(100vh - 56px);
@@ -198,10 +198,20 @@ h1, h2, h3 {
 body {
   font-family: 'KumbhSans', Arial, sans-serif;
   background-color: #21252B;
+  font-size: 0.9rem;
 }
 
 select, input, .form-control {
   border: none !important;
+  font-size: 0.9rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 .25rem rgba(211,212,213,.5);
+}
+
+.btn {
+  font-size: 0.9rem;
 }
 
 .collapsible-content {
@@ -441,5 +451,42 @@ img {
   color: var(--bs-light);
   opacity: 0.8;
   font-size: .7rem;
-  /* text-transform: uppercase; */
+}
+
+.btn-popup {
+  display: flexbox;
+  text-align: left;
+  position: relative;
+  padding-right: 1.5rem;
+}
+
+.btn-popup::after {
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+  top:50%;
+  transform: translateY(-50%);
+  margin-left: .255em;
+  vertical-align: .255em;
+  content: "";
+  border-top: .3em solid;
+    border-top-color: currentcolor;
+    border-top-style: solid;
+    border-top-width: 0.3em;
+  border-right: .3em solid transparent;
+    border-right-color: transparent;
+    border-right-style: solid;
+    border-right-width: 0.3em;
+  border-bottom: 0;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: 0px;
+  border-left: .3em solid transparent;
+    border-left-color: transparent;
+    border-left-style: solid;
+    border-left-width: 0.3em;
+}
+
+.rich-popup {
+  position: relative;
 }

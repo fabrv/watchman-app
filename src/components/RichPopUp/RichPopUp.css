@@ -1,0 +1,22 @@
+/*
+borderRadius: '0.25rem',
+    boxShadow: '0 0 7px 2px rgba(0,0,0,.1)',
+    position: 'absolute',
+    left: '0',
+    top: '38px',
+    minWidth: '200px',
+    backgroundColor: '#FFF',
+    display: show ? 'block' : 'none',
+    zIndex: '10'
+*/
+
+.popup-content {
+  border-radius: 0.25rem;
+  box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  left: 0;
+  top: 38px;
+  min-width: 200px;
+  background-color: #FFF;
+  z-index: 10;
+}

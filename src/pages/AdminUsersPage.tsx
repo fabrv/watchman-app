@@ -1,22 +1,212 @@
+import { useEffect, useMemo, useState } from 'react'
+import { Table } from 'react-bootstrap'
+import { useTable } from 'react-table'
+import { getAll } from '../services/watchman'
+import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
+import { FiEdit2, FiFilter, FiTrash } from 'react-icons/fi'
+import { RowActionPopUp, RowActionOption } from '../components/RowActionPopUp/RowActionPopUp'
+import { User, Role } from '../models/Api'
+import { PageProps } from '../models/Page'
+import { TextAndTags } from '../components/Tags/TextAndTags'
+import { ActionBar, FilterOption } from '../components/ActionBar/ActionBar'
+import { SelectFilter } from '../components/SelectFilter/SelectFilter'
+import { addToStorage } from '../services/storage'
+import { InputFilter } from '../components/InputFilter/InputFilter'
+import { Field } from '../models/Field'
 
-export const AdminUsersPage = () => {
+interface TimeRow {
+  user: any
+  createdAt: any
+}
+
+export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: PageProps) => {
+  const [data, setData] = useState<TimeRow[]>([])
+  const [roles, setRoles] = useState<any[]>([])
+  const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([])
+  const [search, setSearch] = useState<string>('')
+  const [, setUsers] = useState<User[]>([])
+  const [newFields, setNewFields] = useState<Field[]>([
+    { name: 'name', label: 'Name', placeholder: "Enter user's full name", type: 'text', value: '', required: true },
+    { name: 'email', label: 'Email', placeholder: 'Enter email', type: 'text', value: '', required: true },
+    { name: 'password', label: 'Password', placeholder: 'Enter password', type: 'password', value: '', required: true }
+  ])
+
+  const editOptions: RowActionOption[] = [
+    {
+      id: 'edit',
+      value: 'Edit',
+      color: '#007bff',
+      icon: FiEdit2
+    },
+    {
+      id: 'delete',
+      value: 'Delete',
+      color: '#dc3545',
+      icon: FiTrash
+    }
+  ]
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'User',
+        accessor: 'user' as keyof TimeRow,
+        Footer: (info: { rows: { values: TimeRow }[] }) => {
+          const total = useMemo(
+            () => info.rows
+              .reduce((acc, _) => acc + 1, 0),
+            [info.rows]
+          )
+          return <>Count: {total}</>
+        }
+      },
+      {
+        Header: 'Created At',
+        accessor: 'createdAt' as keyof TimeRow
+      }
+    ],
+    []
+  )
+
+  const {
+    headerGroups,
+    rows,
+    prepareRow,
+    footerGroups
+  } = useTable({ columns, data })
+
+  const retrieveRoles = async () => {
+    const allRoles = await getAll<Role[]>('roles', 1000, 0)
+
+    setRoles(allRoles)
+  }
+
+  const retrieveData = async (roleIds: number[] = [], searchField: string) => {
+    const allUsers = await getAll<User>(
+      'users',
+      100,
+      0,
+      roleIds.length > 0 ? roleIds : undefined,
+      'role_ids',
+      { textSearch: { field: 'name', value: searchField } }
+    )
+
+    addToStorage('users', allUsers, storage)
+    setUsers(allUsers)
+
+    const result: TimeRow[] = allUsers.map(user => {
+      return {
+        user: TextAndTags(`**${user.name}** (${user.email})`, [user.role.name]),
+        createdAt: new Date(user.created_at).toLocaleString('en-GB').substring(0, 10)
+      }
+    })
+
+    setData(result)
+  }
+
+  const filters: FilterOption[] = [
+    {
+      Component: InputFilter,
+      key: 'user',
+      props: {
+        id: 'user',
+        value: '',
+        onChange: () => undefined
+      }
+    },
+    {
+      Component: SelectFilter,
+      key: 'role',
+      props: {
+        id: 'role',
+        value: roles,
+        caption: <><FiFilter/> Roles</>,
+        searchKey: 'name',
+        onChange: () => undefined
+      }
+    }
+  ]
+
+  useEffect(() => {
+    retrieveData(selectedRoleIds, search)
+  }, [selectedRoleIds.length, search])
+
+  useEffect(() => {
+    retrieveRoles()
+  }, [])
+
+  useEffect(() => {
+    setNewFields([
+      { name: 'name', label: 'Name', placeholder: "Enter user's full name", type: 'text', value: '', required: true },
+      { name: 'email', label: 'Email', placeholder: 'Enter email', type: 'text', value: '', required: true },
+      { name: 'password', label: 'Password', placeholder: 'Enter password', type: 'password', value: '', required: true },
+      { name: 'role', label: 'Role', placeholder: 'Select role', type: 'select', value: '', required: true, options: roles.map(r => ({ id: r.id, value: r.name })) }
+    ])
+  }, [roles])
+
+  const handleFilterChange = (filters: Record<string, any>) => {
+    const roles: number[] = filters.role || []
+    setSearch(filters.user || '')
+    setSelectedRoleIds(roles)
+  }
+
   return (
     <>
-      <h1>This is Users page</h1>
-
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam justo enim, maximus vitae scelerisque vitae, condimentum eu mi. Phasellus neque orci, semper et blandit nec, vulputate vitae leo. Nullam elementum metus lacus, vitae pretium massa tempus nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris in blandit enim. Cras odio est, rhoncus elementum posuere eget, venenatis vitae nibh. Ut accumsan risus non purus fermentum, id suscipit urna dignissim. Donec sollicitudin pellentesque quam a suscipit. Integer vel elit libero. Suspendisse iaculis felis nec vulputate sollicitudin. Proin luctus tellus ut libero semper semper. Pellentesque ipsum dui, vestibulum ac consequat id, placerat ac enim. Maecenas id vestibulum leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc laoreet, lacus a tincidunt pretium, turpis risus mollis ex, laoreet convallis sem erat vitae risus.
-      </p>
-      <p>
-        Nam nec nisl dignissim, interdum justo euismod, dictum massa. Mauris efficitur lacus nec facilisis tristique. Curabitur volutpat cursus dapibus. Aliquam ut sodales quam. Sed lorem nisl, eleifend porta justo a, interdum rhoncus ex. Nunc interdum elit quis massa sollicitudin, ut condimentum ante vulputate. Maecenas sed ex non dolor tincidunt congue. Aliquam in varius mi. Quisque tincidunt, diam sed euismod pellentesque, ipsum dolor finibus odio, nec scelerisque nulla tellus vel elit. Aliquam maximus tortor in mauris iaculis varius. Aliquam quam odio, blandit sed ipsum ac, gravida euismod ligula. Donec maximus purus vitae elementum maximus. Quisque malesuada felis purus. Morbi efficitur in lacus ut vulputate.
-      </p>
-        Quisque in urna eget risus fermentum tincidunt sed a nibh. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In dolor orci, malesuada tempus purus in, commodo luctus magna. Praesent auctor, massa non egestas iaculis, massa felis tristique lacus, euismod pharetra turpis libero sit amet libero. Etiam a nibh vitae justo sodales feugiat. Vestibulum pharetra velit et quam dignissim varius.
-      <p>
-        Etiam pretium scelerisque purus vel fermentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer dictum ante vitae tempor fringilla. Morbi pharetra porta libero, luctus efficitur elit elementum vel. Cras ullamcorper congue condimentum. Donec quam lorem, pharetra at libero at, auctor pellentesque eros. Donec imperdiet eleifend libero. Donec nunc velit, vestibulum sed tristique vehicula, blandit at mi. Aliquam nec tincidunt turpis, porta commodo arcu. Aliquam lacinia quis dui vel pellentesque. Duis gravida, nisl et dignissim facilisis, orci magna pulvinar ante, tincidunt varius risus purus sit amet neque. Vestibulum libero mi, blandit ultrices mi eget, egestas sodales magna.
-      </p>
-      <p>
-        Pellentesque nulla velit, vestibulum ut nibh nec, eleifend ultrices justo. Nullam aliquet sapien efficitur est convallis, nec accumsan lacus luctus. Nulla ut nulla vitae elit dignissim hendrerit vitae a quam. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ut viverra nisi. In pretium hendrerit felis, a ultrices urna gravida a. Quisque metus tortor, dapibus a purus et, bibendum semper augue. Ut placerat, magna id condimentum consectetur, tellus odio tempor urna, sed mollis erat nunc eget ante. Sed volutpat mollis gravida. Sed scelerisque sodales ante quis rutrum. Etiam hendrerit sodales ligula at efficitur. Maecenas non aliquam leo, non fringilla justo. Aliquam pharetra mollis tristique. Aenean dapibus turpis nec ex laoreet, eu pellentesque massa ultricies. Praesent venenatis elementum nunc at vestibulum. Morbi eget est est.
-      </p>
+      <h1>{title}</h1>
+      <ActionBar
+        exportOptions={[
+          { id: 'csv', icon: FaFileCsv, value: 'CSV' },
+          { id: 'excel', icon: FaFileExcel, value: 'Excel' }
+        ]}
+        showNew={true}
+        newFields={newFields}
+        newCaption="New User"
+        filters={filters}
+        onExportClick={(id: string) => console.log(id)}
+        onChange={handleFilterChange}
+      />
+      <Table variant="dark" responsive>
+        <thead>
+          {headerGroups.map((headerGroup, i) => (
+            <tr key={i}>
+              {headerGroup.headers.map((column, index) => (
+                <th key={index}>
+                  {column.render('Header')}
+                </th>
+              ))}
+              <th style={{ width: '1.5rem' }}></th>
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {rows.map((row, i) => {
+            prepareRow(row)
+            return (
+              <tr key={i}>
+                {row.cells.map((cell, index) => {
+                  return (
+                    <td key={index}>
+                      {cell.render('Cell')}
+                    </td>
+                  )
+                })}
+                <td>
+                  <RowActionPopUp onClick={(e) => console.log(e)} options={editOptions} />
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+        <tfoot>
+          {footerGroups.map((group, i) => (
+            <tr key={i}>
+              {group.headers.map((column, index) => (
+                <td key={index}>{column.render('Footer')}</td>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
+      </Table>
     </>
   )
 }
