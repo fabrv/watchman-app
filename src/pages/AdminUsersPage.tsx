@@ -2,17 +2,17 @@ import { useEffect, useMemo, useState } from 'react'
 import { Table } from 'react-bootstrap'
 import { useTable } from 'react-table'
 import { getAll } from '../services/watchman'
-import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
-import { FiEdit2, FiFilter, FiTrash } from 'react-icons/fi'
-import { RowActionPopUp, RowActionOption } from '../components/RowActionPopUp/RowActionPopUp'
 import { User, Role } from '../models/Api'
 import { PageProps } from '../models/Page'
-import { TextAndTags } from '../components/Tags/TextAndTags'
-import { ActionBar, FilterOption } from '../components/ActionBar/ActionBar'
-import { SelectFilter } from '../components/SelectFilter/SelectFilter'
 import { addToStorage } from '../services/storage'
-import { InputFilter } from '../components/InputFilter/InputFilter'
-import { Field } from '../models/Field'
+// import { FaFileExcel, FaFileCsv } from 'react-icons/fa'
+// import { FiEdit2, FiFilter, FiTrash } from 'react-icons/fi'
+// import { RowActionPopUp, RowActionOption } from '../components/RowActionPopUp/RowActionPopUp'
+// import { TextAndTags } from '../components/Tags/TextAndTags'
+// import { ActionBar, FilterOption } from '../components/ActionBar/ActionBar'
+// import { SelectFilter } from '../components/SelectFilter/SelectFilter'
+// import { InputFilter } from '../components/InputFilter/InputFilter'
+// import { Field } from '../models/Field'
 
 interface TimeRow {
   user: any
@@ -22,29 +22,29 @@ interface TimeRow {
 export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: PageProps) => {
   const [data, setData] = useState<TimeRow[]>([])
   const [roles, setRoles] = useState<any[]>([])
-  const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([])
-  const [search, setSearch] = useState<string>('')
+  const [selectedRoleIds] = useState<number[]>([])
+  const [search] = useState<string>('')
   const [, setUsers] = useState<User[]>([])
-  const [newFields, setNewFields] = useState<Field[]>([
-    { name: 'name', label: 'Name', placeholder: "Enter user's full name", type: 'text', value: '', required: true },
-    { name: 'email', label: 'Email', placeholder: 'Enter email', type: 'text', value: '', required: true },
-    { name: 'password', label: 'Password', placeholder: 'Enter password', type: 'password', value: '', required: true }
-  ])
+  // const [newFields, setNewFields] = useState<Field[]>([
+  //   { name: 'name', label: 'Name', placeholder: "Enter user's full name", type: 'text', value: '', required: true },
+  //   { name: 'email', label: 'Email', placeholder: 'Enter email', type: 'text', value: '', required: true },
+  //   { name: 'password', label: 'Password', placeholder: 'Enter password', type: 'password', value: '', required: true }
+  // ])
 
-  const editOptions: RowActionOption[] = [
-    {
-      id: 'edit',
-      value: 'Edit',
-      color: '#007bff',
-      icon: FiEdit2
-    },
-    {
-      id: 'delete',
-      value: 'Delete',
-      color: '#dc3545',
-      icon: FiTrash
-    }
-  ]
+  // const editOptions: RowActionOption[] = [
+  //   {
+  //     id: 'edit',
+  //     value: 'Edit',
+  //     color: '#007bff',
+  //     icon: FiEdit2
+  //   },
+  //   {
+  //     id: 'delete',
+  //     value: 'Delete',
+  //     color: '#dc3545',
+  //     icon: FiTrash
+  //   }
+  // ]
 
   const columns = useMemo(
     () => [
@@ -96,7 +96,8 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
 
     const result: TimeRow[] = allUsers.map(user => {
       return {
-        user: TextAndTags(`**${user.name}** (${user.email})`, [user.role.name]),
+        // user: TextAndTags(`**${user.name}** (${user.email})`, [user.role.name]),
+        user: '',
         createdAt: new Date(user.created_at).toLocaleString('en-GB').substring(0, 10)
       }
     })
@@ -104,28 +105,28 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
     setData(result)
   }
 
-  const filters: FilterOption[] = [
-    {
-      Component: InputFilter,
-      key: 'user',
-      props: {
-        id: 'user',
-        value: '',
-        onChange: () => undefined
-      }
-    },
-    {
-      Component: SelectFilter,
-      key: 'role',
-      props: {
-        id: 'role',
-        value: roles,
-        caption: <><FiFilter/> Roles</>,
-        searchKey: 'name',
-        onChange: () => undefined
-      }
-    }
-  ]
+  // const filters: FilterOption[] = [
+  //   {
+  //     Component: InputFilter,
+  //     key: 'user',
+  //     props: {
+  //       id: 'user',
+  //       value: '',
+  //       onChange: () => undefined
+  //     }
+  //   },
+  //   {
+  //     Component: SelectFilter,
+  //     key: 'role',
+  //     props: {
+  //       id: 'role',
+  //       value: roles,
+  //       caption: <><FiFilter/> Roles</>,
+  //       searchKey: 'name',
+  //       onChange: () => undefined
+  //     }
+  //   }
+  // ]
 
   useEffect(() => {
     retrieveData(selectedRoleIds, search)
@@ -136,24 +137,24 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
   }, [])
 
   useEffect(() => {
-    setNewFields([
-      { name: 'name', label: 'Name', placeholder: "Enter user's full name", type: 'text', value: '', required: true },
-      { name: 'email', label: 'Email', placeholder: 'Enter email', type: 'text', value: '', required: true },
-      { name: 'password', label: 'Password', placeholder: 'Enter password', type: 'password', value: '', required: true },
-      { name: 'role', label: 'Role', placeholder: 'Select role', type: 'select', value: '', required: true, options: roles.map(r => ({ id: r.id, value: r.name })) }
-    ])
+    // setNewFields([
+    //   { name: 'name', label: 'Name', placeholder: "Enter user's full name", type: 'text', value: '', required: true },
+    //   { name: 'email', label: 'Email', placeholder: 'Enter email', type: 'text', value: '', required: true },
+    //   { name: 'password', label: 'Password', placeholder: 'Enter password', type: 'password', value: '', required: true },
+    //   { name: 'role', label: 'Role', placeholder: 'Select role', type: 'select', value: '', required: true, options: roles.map(r => ({ id: r.id, value: r.name })) }
+    // ])
   }, [roles])
 
-  const handleFilterChange = (filters: Record<string, any>) => {
-    const roles: number[] = filters.role || []
-    setSearch(filters.user || '')
-    setSelectedRoleIds(roles)
-  }
+  // const handleFilterChange = (filters: Record<string, any>) => {
+  //   const roles: number[] = filters.role || []
+  //   setSearch(filters.user || '')
+  //   setSelectedRoleIds(roles)
+  // }
 
   return (
     <>
       <h1>{title}</h1>
-      <ActionBar
+      {/* <ActionBar
         exportOptions={[
           { id: 'csv', icon: FaFileCsv, value: 'CSV' },
           { id: 'excel', icon: FaFileExcel, value: 'Excel' }
@@ -164,7 +165,7 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
         filters={filters}
         onExportClick={(id: string) => console.log(id)}
         onChange={handleFilterChange}
-      />
+      /> */}
       <Table variant="dark" responsive>
         <thead>
           {headerGroups.map((headerGroup, i) => (
@@ -191,7 +192,7 @@ export const AdminUsersPage = ({ storage = sessionStorage, title = 'Users' }: Pa
                   )
                 })}
                 <td>
-                  <RowActionPopUp onClick={(e) => console.log(e)} options={editOptions} />
+                  {/* <RowActionPopUp onClick={(e) => console.log(e)} options={editOptions} /> */}
                 </td>
               </tr>
             )

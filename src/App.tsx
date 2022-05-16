@@ -1,49 +1,23 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import { AdminProjectsPage } from './pages/AdminProjectsPage'
-import { AdminTeamsPage } from './pages/AdminTeamsPage'
-import { AdminTypesPage } from './pages/AdminTypesPage'
-import { AdminUsersPage } from './pages/AdminUsersPage'
-import { ChangeLogPage } from './pages/ChangeLogPage'
 import { Layout } from './pages/Layout'
-import { ProjectsPage } from './pages/ProjectsPage'
 import { TeamPage } from './pages/TeamPage'
-import { TrackPage } from './pages/TrackPage'
-import { Option } from './models/Option'
-import { AdminTimesPage } from './pages/AdminTimesPage'
 import { LandingPage } from './pages/LandingPage'
-
-const TrackPageLabels = {
-  project: 'Project',
-  type: 'Type',
-  description: 'Description',
-  track: 'Track'
-}
-
-const availableProjects: Option[] = [
-  { id: 1, value: 'Project 1' },
-  { id: 2, value: 'Project 2' },
-  { id: 3, value: 'Project 3' }
-]
-
-const availableTypes: Option[] = [
-  { id: 1, value: 'Type 1' },
-  { id: 2, value: 'Type 2' },
-  { id: 3, value: 'Type 3' }
-]
+import { useAuth0 } from '@auth0/auth0-react'
 
 function App () {
-  const isAuthorized = false
+  const { isAuthenticated } = useAuth0()
 
-  if (!isAuthorized) {
+  if (!isAuthenticated) {
     return <LandingPage />
   }
 
   return (
     <Layout>
       <Routes>
-        <Route path="/"
+        <Route path='/' element={<TeamPage />} />
+        {/* <Route path="/"
           element={
             <TrackPage
               labels={TrackPageLabels}
@@ -59,7 +33,7 @@ function App () {
         <Route path="/admin/users" element={<AdminUsersPage />} />
         <Route path="/admin/projects" element={<AdminProjectsPage />} />
         <Route path="/admin/teams" element={<AdminTeamsPage />} />
-        <Route path="/admin/types" element={<AdminTypesPage />} />
+        <Route path="/admin/types" element={<AdminTypesPage />} /> */}
       </Routes>
     </Layout>
   )

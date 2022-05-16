@@ -30,7 +30,12 @@ export async function getAll<T> (collection: collections, limit: number = 100, o
   const queryString = Object.keys(querObj).map(key => `${key}=${querObj[key]}`).join('&')
 
   const requestUrl = `${url}/${collection}?${queryString}${query}`
-  const response = await fetch(requestUrl)
+  const response = await fetch(requestUrl, {
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 
   const result = await response.json()
   return result || []
