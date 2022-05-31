@@ -5,6 +5,7 @@ export type collections =
   | 'roles'
   | 'time-logs'
   | 'users'
+  | 'session'
 
 export interface Model {
   id: string | number;
@@ -39,4 +40,12 @@ export interface User {
   role: Role;
   created_at: string;
   updated_at: string;
+}
+
+export interface ErrorResponse {
+  error: string;
+}
+
+export interface MessageResponse {
+  message: string;
 }

@@ -27,11 +27,12 @@ export async function getAll<T> (collection: collections, limit: number = 100, o
     querObj[filters.textSearch.field] = filters.textSearch.value
   }
 
-  const queryString = Object.keys(querObj).map(key => `${key}=${querObj[key]}`).join('&')
+  const queryString = Object.keys(querObj).filter(k => querObj[k] != null).map(key => `${key}=${querObj[key]}`).join('&')
 
   const requestUrl = `${url}/${collection}?${queryString}${query}`
   const response = await fetch(requestUrl, {
     mode: 'cors',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     }
@@ -39,4 +40,20 @@ export async function getAll<T> (collection: collections, limit: number = 100, o
 
   const result = await response.json()
   return result || []
+}
+
+export async function post<T> (collection: collections, data: any): Promise<T> {
+  const requestUrl = `${url}/${collection}`
+  const response = await fetch(requestUrl, {
+    method: 'POST',
+    mode: 'cors',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+
+  const result = await response.json()
+  return result
 }

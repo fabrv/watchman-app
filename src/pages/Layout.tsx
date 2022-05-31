@@ -103,7 +103,7 @@ export const Layout = ({ children }: LayoutProps) => {
           <SideBar activeKey={firstTwoRoutes(location.pathname)} data={menuItems} onSelect={onSideBarSelect} />
         </Col>
         <Col md={10}>
-          <div className='content text-light'>
+          <div className='content'>
             {children}
           </div>
         </Col>
