@@ -1,45 +1,30 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useEffect, useState } from 'react'
-// import { Route, Routes } from 'react-router-dom'
 import 'watchman-core/dist/App.css'
 import './App.css'
-// import { Layout } from './pages/Layout'
-// import { TeamPage } from './pages/TeamPage'
 import { LandingPage } from './pages/LandingPage'
 
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import { Layout } from './pages/Layout'
 import { Route, Routes } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
-import configStore from './store/store'
 import { setUser } from './store/userSlice'
 import { sanitizeUser } from './models/User'
-import { getAll, post } from './services/watchman'
-import { MessageResponse, Role } from './models/Api'
+import { deleteItem, post } from './services/watchman'
+import { MessageResponse } from './models/Api'
+import { TrackPage } from './pages/TrackPage'
+
+import configStore from './store/store'
 // import { TeamPage } from './pages/TeamPage'
 
 const App = () => {
   const [signinState, setSigninState] = useState(0)
   const store = configStore()
 
-  const getRoles = async () => {
-    const roles = await getAll<Role>('roles')
-    console.log('roles', roles)
-  }
-
   const routes = () => (
     <Layout>
       <Routes>
-        <Route path='/' element={
-          <div>
-            <h1>My App</h1>
-            <p>Welcome {firebase?.auth()?.currentUser?.displayName}! You are now signed-in!</p>
-            <Button onClick={() => firebase.auth().signOut()}>Sign-out</Button>
-            <Button onClick={getRoles}>Roles</Button>
-          </div>
-        } />
-        {/* <Route path="/"
+        <Route path="/"
           element={
             <TrackPage
               labels={TrackPageLabels}
@@ -48,7 +33,7 @@ const App = () => {
             />
           }
         />
-        <Route path="/team" element={<TeamPage />} />
+        {/* <Route path="/team" element={<TeamPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/changelog" element={<ChangeLogPage />} />
         <Route path="/admin/times" element={<AdminTimesPage />} />
@@ -79,7 +64,12 @@ const App = () => {
           console.log(error)
         })
       } else {
-        localStorage.removeItem('user')
+        if (localStorage.getItem('user')) {
+          localStorage.removeItem('user')
+
+          // TODO: handle error
+          deleteItem<MessageResponse>('session')
+        }
       }
       setSigninState(u ? 2 : 1)
     })

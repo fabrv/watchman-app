@@ -57,3 +57,18 @@ export async function post<T> (collection: collections, data: any): Promise<T> {
   const result = await response.json()
   return result
 }
+
+export async function deleteItem<T> (collection: collections, id?: number): Promise<T> {
+  const requestUrl = `${url}/${collection}/${id}`
+  const response = await fetch(requestUrl, {
+    method: 'DELETE',
+    mode: 'cors',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  const result = await response.json()
+  return result
+}
